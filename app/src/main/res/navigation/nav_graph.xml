@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.monee.HomeFragment"
+        android:label="Beranda"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_allTransactionFragment"
+            app:destination="@id/allTransactionFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/allTransactionFragment"
+        android:name="com.example.monee.AllTransactionFragment"
+        android:label="Semua Transaksi" />
+
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.example.monee.AddTransactionFragment"
+        android:label="Tambah Transaksi" />
+
+    <fragment
+        android:id="@+id/editTransactionFragment"
+        android:name="com.example.monee.EditTransactionFragment"
+        android:label="Edit Transaksi">
+
+        <argument
+            android:name="transaksiId"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_editTransactionFragment"
+            app:destination="@id/editTransactionFragment" />
+    </fragment>
+
+</navigation>

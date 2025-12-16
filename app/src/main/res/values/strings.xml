@@ -1,0 +1,13 @@
+<resources>
+    <string name="edit_transaksi">Edit Transaksi</string>
+    <string name="pengeluaran">Pengeluaran</string>
+    <string name="pemasukan">Pemasukan</string>
+    <string name="judul">Judul</string>
+    <string name="jumlah">Jumlah</string>
+    <string name="kategori">Kategori</string>
+    <string name="pilih_kategori">Pilih Kategori</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="deskripsi_opsional">Deskripsi (Opsional)</string>
+    <string name="batal">Batal</string>
+    <string name="simpan_perubahan">Simpan Perubahan</string>
+</resources>
