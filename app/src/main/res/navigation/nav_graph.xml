@@ -15,15 +15,15 @@
             app:destination="@id/editTransactionFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/allTransactionFragment"
-        android:name="com.example.monee.AllTransactionFragment"
-        android:label="Semua Transaksi" />
+<!--    <fragment-->
+<!--        android:id="@+id/allTransactionFragment"-->
+<!--        android:name="com.example.monee.AllTransactionFragment"-->
+<!--        android:label="Semua Transaksi" />-->
 
-    <fragment
-        android:id="@+id/addTransactionFragment"
-        android:name="com.example.monee.AddTransactionFragment"
-        android:label="Tambah Transaksi" />
+<!--    <fragment-->
+<!--        android:id="@+id/addTransactionFragment"-->
+<!--        android:name="com.example.monee.AddTransactionFragment"-->
+<!--        android:label="Tambah Transaksi" />-->
 
     <fragment
         android:id="@+id/editTransactionFragment"
