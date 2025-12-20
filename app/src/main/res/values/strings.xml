@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Monee</string>
     <string name="edit_transaksi">Edit Transaksi</string>
     <string name="pengeluaran">Pengeluaran</string>
     <string name="pemasukan">Pemasukan</string>
@@ -10,4 +11,7 @@
     <string name="deskripsi_opsional">Deskripsi (Opsional)</string>
     <string name="batal">Batal</string>
     <string name="simpan_perubahan">Simpan Perubahan</string>
+
+    <string name="des_ikon_kategori">Ikon kategori transaksi</string>
+    <string name="des_tombol_hapus">Tombol hapus transaksi</string>
 </resources>

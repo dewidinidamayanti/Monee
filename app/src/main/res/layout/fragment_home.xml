@@ -40,12 +40,26 @@
                 android:elevation="4dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Saldo"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_wallet"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:text="Total Saldo"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/tvTotalSaldo"
@@ -61,26 +75,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp">
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="50dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <TextView
-                            android:text="Pemasukan"
-                            android:textColor="@android:color/white"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_trending_up"
+                            android:layout_marginEnd="8dp"/>
 
-                        <TextView
-                            android:id="@+id/tvTotalPemasukan"
-                            android:text="Rp0"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:text="Pemasukan:"
+                                android:textColor="@android:color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:id="@+id/tvTotalPemasukan"
+                                android:text="Rp0"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
                     </LinearLayout>
 
                     <View
@@ -91,22 +120,38 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <TextView
-                            android:text="Pengeluaran"
-                            android:textColor="@android:color/white"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_trending_down"
+                            android:layout_marginEnd="8dp"/>
 
-                        <TextView
-                            android:id="@+id/tvTotalPengeluaran"
-                            android:text="Rp0"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:text="Pengeluaran:"
+                                android:textColor="@android:color/white"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <TextView
+                                android:id="@+id/tvTotalPengeluaran"
+                                android:text="Rp0"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
                     </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -131,9 +176,24 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp">
 
+                    <FrameLayout
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/bg_circle_green_soft"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_trending_up"
+                            android:layout_gravity="center"
+                            app:tint="@color/incomeGreen"/>
+                    </FrameLayout>
+
                     <TextView
                         android:text="Pemasukan"
-                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -144,7 +204,7 @@
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
+                        android:layout_marginTop="5dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -161,9 +221,24 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp">
 
+                    <FrameLayout
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/bg_circle_red_soft"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_trending_down"
+                            android:layout_gravity="center"
+                            app:tint="@color/expenseRed"/>
+                    </FrameLayout>
+
                     <TextView
                         android:text="Pengeluaran"
-                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -174,11 +249,10 @@
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp" />
+                        android:layout_marginTop="5dp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- TRANSAKSI TERKINI -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

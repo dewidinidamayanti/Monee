@@ -12,12 +12,11 @@
     <color name="incomeGreen">#2ECC71</color>
     <color name="expenseRed">#E74C3C</color>
 
-    <string name="des_ikon_kategori">Ikon kategori transaksi</string>
-    <string name="des_tombol_hapus">Tombol hapus transaksi</string>
-
 
     <color name="white">#FFFFFF</color>
     <color name="lightGrey">#F5F5F5</color>
     <color name="darkGrey">#C4C4C4</color>
+
+    <color name="gray200">#EEEEEE</color>
 
 </resources>

@@ -18,9 +18,10 @@
         android:baselineAligned="false">
 
         <FrameLayout
+            android:id="@+id/iconBg"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:background="@drawable/bg_icon_circle"
+            android:background="@drawable/bg_circle_red_soft"
             android:layout_marginEnd="12dp">
 
 
@@ -49,23 +50,40 @@
                 android:textStyle="bold"
                 android:textColor="@color/textPrimary" />
 
-            <TextView
-                android:id="@+id/tvCategory"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Makanan"
-                android:textSize="12sp"
-                android:textColor="@color/textSecondary"
-                android:layout_marginTop="2dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12 Feb 2025"
-                android:textSize="11sp"
-                android:textColor="@color/textSecondary"
-                android:layout_marginTop="2dp" />
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Makanan"
+                    android:textSize="12sp"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginTop="2dp" />
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/dot_grey"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2.5dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12 Feb 2025"
+                    android:textSize="11sp"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginTop="2dp" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -84,13 +102,22 @@
                 android:textColor="@color/expenseRed"
                 android:layout_marginEnd="10dp" />
 
-            <ImageView
-                android:id="@+id/btnDelete"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_delete"
-                app:tint="@color/expenseRed"
-                android:contentDescription="@string/des_tombol_hapus" />
+            <FrameLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/bg_retangle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/btnDelete"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_delete"
+                    app:tint="@color/expenseRed"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/des_tombol_hapus" />
+            </FrameLayout>
+
         </LinearLayout>
 
     </LinearLayout>

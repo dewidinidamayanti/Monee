@@ -1,59 +1,104 @@
 package com.example.monee
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.monee.db.Transaksi
+import com.example.monee.db.TransaksiViewModel
+import androidx.navigation.fragment.findNavController
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var viewModel: TransaksiViewModel
+    private lateinit var transaksiAdapter: TransaksiAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
+
+        val tvTotalSaldo = view.findViewById<TextView>(R.id.tvTotalSaldo)
+        val tvTotalPemasukan = view.findViewById<TextView>(R.id.tvTotalPemasukan)
+        val tvTotalPengeluaran = view.findViewById<TextView>(R.id.tvTotalPengeluaran)
+        val tvMiniIncome = view.findViewById<TextView>(R.id.tvMiniIncome)
+        val tvMiniExpense = view.findViewById<TextView>(R.id.tvMiniExpense)
+
+        val rvTransaksi = view.findViewById<RecyclerView>(R.id.rvTransaksiTerkini)
+
+        transaksiAdapter = TransaksiAdapter(
+            onEditClick = { transaksi ->
+                val bundle = Bundle().apply {
+                    putInt("transaksiId", transaksi.id)
                 }
+                findNavController().navigate(
+                    R.id.editTransactionFragment,
+                    bundle
+                )
+            },
+            onDeleteClick = { transaksi -> confirmDelete(transaksi) }
+        )
+
+        rvTransaksi.layoutManager = LinearLayoutManager(requireContext())
+        rvTransaksi.adapter = transaksiAdapter
+        rvTransaksi.isNestedScrollingEnabled = false
+
+        viewModel.getAllTransaksi().observe(viewLifecycleOwner) { list ->
+            if (list.isNullOrEmpty()) {
+                tvTotalSaldo.text = "Rp0"
+                tvTotalPemasukan.text = "Rp0"
+                tvTotalPengeluaran.text = "Rp0"
+                tvMiniIncome.text = "Rp0"
+                tvMiniExpense.text = "Rp0"
+                transaksiAdapter.submitList(emptyList())
+                return@observe
             }
+
+            val totalIncome = list.filter { it.tipe == "income" }.sumOf { it.nominal }
+            val totalExpense = list.filter { it.tipe == "expense" }.sumOf { it.nominal }
+            val saldo = totalIncome - totalExpense
+
+            tvTotalSaldo.text = formatRupiah(saldo)
+            tvTotalPemasukan.text = formatRupiah(totalIncome)
+            tvTotalPengeluaran.text = formatRupiah(totalExpense)
+            tvMiniIncome.text = formatRupiah(totalIncome)
+            tvMiniExpense.text = formatRupiah(totalExpense)
+
+            transaksiAdapter.submitList(
+                list.sortedByDescending { it.tanggal }.take(3)
+            )
+        }
+    }
+
+    private fun confirmDelete(transaksi: Transaksi) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Hapus Transaksi")
+            .setMessage("Yakin ingin menghapus transaksi ini?")
+            .setPositiveButton("Hapus") { _, _ ->
+                viewModel.delete(transaksi)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun openEdit(transaksi: Transaksi) {
+        // nanti sambungkan ke fragment edit
+    }
+
+    private fun formatRupiah(amount: Double): String {
+        return "Rp" + String.format("%,.0f", amount)
     }
 }
