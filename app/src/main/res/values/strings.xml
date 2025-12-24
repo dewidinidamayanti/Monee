@@ -14,4 +14,6 @@
 
     <string name="des_ikon_kategori">Ikon kategori transaksi</string>
     <string name="des_tombol_hapus">Tombol hapus transaksi</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

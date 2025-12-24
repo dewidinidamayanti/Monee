@@ -6,25 +6,23 @@ import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
+class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
 
     private lateinit var viewModel: TransaksiViewModel
-    private var transaksiId = -1
-    private lateinit var transaksiData: Transaksi
-
     private var selectedType = "Pengeluaran"
-    private var selectedTanggal: Long = System.currentTimeMillis()   // ⭐ prevent zero date bug
+    private var selectedTanggal = System.currentTimeMillis()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java] // ⭐ samakan scope
+        viewModel = ViewModelProvider(this)[TransaksiViewModel::class.java]
 
         val etTitle: EditText = view.findViewById(R.id.etTitle)
         val etAmount: EditText = view.findViewById(R.id.etAmount)
@@ -35,80 +33,35 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         val btnExpense: MaterialButton = view.findViewById(R.id.btnExpense)
         val btnIncome: MaterialButton = view.findViewById(R.id.btnIncome)
         val btnSave: MaterialButton = view.findViewById(R.id.btnSave)
-        val btnCancel: MaterialButton = view.findViewById(R.id.btnCancel)
-        val btnClose: ImageView = view.findViewById(R.id.btnClose)
 
-        transaksiId = arguments?.getInt("transaksiId") ?: -1
-        if (transaksiId == -1) {
-            requireActivity().onBackPressed()
-            return
-        }
-
-        val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
-
-        viewModel.getById(transaksiId).observe(viewLifecycleOwner) { data ->
-            transaksiData = data
-
-            etTitle.setText(data.judul)
-            etAmount.setText(data.nominal.toString())
-            autoCategory.setText(data.kategori, false)
-            etNote.setText(data.deskripsi)
-
-            selectedTanggal = data.tanggal
-            etDate.setText(sdf.format(Date(data.tanggal)))
-
-            selectedType = data.tipe
-            updateTypeUI(selectedType, btnExpense, btnIncome)
-        }
+        updateTypeUI("Pengeluaran", btnExpense, btnIncome)
+        btnSave.text = "Tambah Pengeluaran"
 
         btnExpense.setOnClickListener {
             selectedType = "Pengeluaran"
             updateTypeUI(selectedType, btnExpense, btnIncome)
+            btnSave.text = "Tambah Pengeluaran"
         }
 
         btnIncome.setOnClickListener {
             selectedType = "Pemasukan"
             updateTypeUI(selectedType, btnExpense, btnIncome)
+            btnSave.text = "Tambah Pemasukan"
         }
 
+        val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+        etDate.setText(sdf.format(Date(selectedTanggal)))
+
         etDate.setOnClickListener {
-            val cal = Calendar.getInstance().apply { timeInMillis = selectedTanggal }
+            val cal = Calendar.getInstance()
+            cal.timeInMillis = selectedTanggal
 
             DatePickerDialog(requireContext(), { _, y, m, d ->
                 cal.set(y, m, d)
                 selectedTanggal = cal.timeInMillis
                 etDate.setText(sdf.format(Date(selectedTanggal)))
-            },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
         }
-
-        btnSave.setOnClickListener {
-            if (etTitle.text.isNullOrBlank() || etAmount.text.isNullOrBlank()) {
-                Toast.makeText(requireContext(), "Lengkapi data terlebih dahulu", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val updated = transaksiData.copy(
-                judul = etTitle.text.toString().trim(),
-                nominal = etAmount.text.toString().toDouble(),
-                kategori = autoCategory.text.toString(),
-                tipe = selectedType,
-                tanggal = selectedTanggal,
-                deskripsi = etNote.text.toString().trim()
-            )
-
-            viewModel.update(updated)
-            requireActivity().onBackPressed()
-        }
-
-        btnCancel.setOnClickListener {
-            requireActivity().onBackPressed()  // ⭐ Edit tidak boleh hapus data
-        }
-
-        btnClose.setOnClickListener { requireActivity().onBackPressed() }
 
         val categories = listOf(
             "Makanan", "Belanja", "Transportasi", "Utilitas",
@@ -118,6 +71,19 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         autoCategory.setAdapter(
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
         )
+
+        btnSave.setOnClickListener {
+            val transaksi = Transaksi(
+                judul = etTitle.text.toString().trim(),
+                kategori = autoCategory.text.toString(),
+                nominal = etAmount.text.toString().toDoubleOrNull() ?: 0.0,
+                tanggal = selectedTanggal,
+                tipe = selectedType,
+                deskripsi = etNote.text.toString().trim()
+            )
+            viewModel.insert(transaksi)
+            findNavController().navigateUp()
+        }
     }
 
     private fun updateTypeUI(type: String, btnExpense: MaterialButton, btnIncome: MaterialButton) {

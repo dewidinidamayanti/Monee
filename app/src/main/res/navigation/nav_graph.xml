@@ -10,20 +10,29 @@
         android:name="com.example.monee.HomeFragment"
         android:label="Beranda">
 
+<!--        <action-->
+<!--            android:id="@+id/action_homeFragment_to_addTransactionFragment"-->
+<!--            app:destination="@id/addTransactionFragment" />-->
+
+        <action
+            android:id="@+id/action_homeFragment_to_allTransactionFragment"
+            app:destination="@id/allTransactionFragment" />
+
         <action
             android:id="@+id/action_homeFragment_to_editTransactionFragment"
             app:destination="@id/editTransactionFragment" />
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/allTransactionFragment"-->
-<!--        android:name="com.example.monee.AllTransactionFragment"-->
-<!--        android:label="Semua Transaksi" />-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/addTransactionFragment"-->
-<!--        android:name="com.example.monee.AddTransactionFragment"-->
-<!--        android:label="Tambah Transaksi" />-->
+    <fragment
+        android:id="@+id/allTransactionFragment"
+        android:name="com.example.monee.AllTransactionFragment"
+        android:label="Semua Transaksi" />
+
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.example.monee.AddTransactionFragment"
+        android:label="Tambah Transaksi" />
 
     <fragment
         android:id="@+id/editTransactionFragment"
