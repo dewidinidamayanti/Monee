@@ -50,7 +50,7 @@ class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
         rv.layoutManager = LinearLayoutManager(requireContext())
         rv.adapter = adapter
 
-        viewModel.getAllTransaksi().observe(viewLifecycleOwner) {
+        viewModel.allTransaksi.observe(viewLifecycleOwner) {
             allList = it
             applyFilterAndSearch(etSearch.text.toString(), tvCount, tvEmpty)
         }

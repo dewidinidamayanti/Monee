@@ -51,7 +51,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_allTransactionFragment)
         }
 
-        viewModel.getAllTransaksi().observe(viewLifecycleOwner) { list ->
+        viewModel.allTransaksi.observe(viewLifecycleOwner) { list ->
 
             if (list.isNullOrEmpty()) {
                 tvTotalSaldo.text = "Rp0"

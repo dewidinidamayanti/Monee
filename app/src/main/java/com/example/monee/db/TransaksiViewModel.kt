@@ -25,8 +25,6 @@ class TransaksiViewModel(application: Application) : AndroidViewModel(applicatio
         totalPengeluaran = repository.getTotalPengeluaran().map { it ?: 0.0 }
     }
 
-    fun getAllTransaksi(): LiveData<List<Transaksi>> = allTransaksi
-
     fun insert(transaksi: Transaksi) =
         viewModelScope.launch(Dispatchers.IO) { repository.insert(transaksi) }
 
@@ -39,4 +37,3 @@ class TransaksiViewModel(application: Application) : AndroidViewModel(applicatio
     fun getById(id: Int): LiveData<Transaksi> =
         repository.getById(id)
 }
-

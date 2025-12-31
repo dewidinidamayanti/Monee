@@ -82,7 +82,7 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
                 deskripsi = etNote.text.toString().trim()
             )
             viewModel.insert(transaksi)
-            findNavController().navigateUp()
+            findNavController().navigate(R.id.action_addTransactionFragment_to_homeFragment)
         }
     }
 

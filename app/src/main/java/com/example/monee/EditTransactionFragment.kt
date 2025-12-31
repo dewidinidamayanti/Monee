@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.button.MaterialButton
@@ -40,7 +41,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
         transaksiId = arguments?.getInt("transaksiId") ?: -1
         if (transaksiId == -1) {
-            requireActivity().onBackPressed()
+            findNavController().navigateUp()
             return
         }
 
@@ -101,14 +102,14 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             )
 
             viewModel.update(updated)
-            requireActivity().onBackPressed()
+            findNavController().navigate(R.id.action_editTransactionFragment_to_homeFragment)
         }
 
         btnCancel.setOnClickListener {
-            requireActivity().onBackPressed()  // ⭐ Edit tidak boleh hapus data
+            findNavController().navigateUp()
         }
 
-        btnClose.setOnClickListener { requireActivity().onBackPressed() }
+        btnClose.setOnClickListener { findNavController().navigateUp() }
 
         val categories = listOf(
             "Makanan", "Belanja", "Transportasi", "Utilitas",
