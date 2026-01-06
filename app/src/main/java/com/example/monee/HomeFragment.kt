@@ -12,14 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var viewModel: TransaksiViewModel
     private lateinit var transaksiAdapter: TransaksiAdapter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +41,6 @@ class HomeFragment : Fragment() {
 
         rvTransaksi.layoutManager = LinearLayoutManager(requireContext())
         rvTransaksi.adapter = transaksiAdapter
-        rvTransaksi.isNestedScrollingEnabled = false
 
         tvLihatSemua.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_allTransactionFragment)
@@ -61,13 +56,15 @@ class HomeFragment : Fragment() {
                 tvMiniExpense.text = "Rp0"
                 transaksiAdapter.submitList(emptyList())
                 tvHomeEmpty.visibility = View.VISIBLE
+                rvTransaksi.visibility = View.GONE
                 return@observe
             }
 
             tvHomeEmpty.visibility = View.GONE
+            rvTransaksi.visibility = View.VISIBLE
 
-            val totalIncome = list.filter { it.tipe == "Pemasukan" }.sumOf { it.nominal }
-            val totalExpense = list.filter { it.tipe == "Pengeluaran" }.sumOf { it.nominal }
+            val totalIncome = list.filter { it.tipe.equals("Pemasukan", ignoreCase = true) }.sumOf { it.nominal }
+            val totalExpense = list.filter { it.tipe.equals("Pengeluaran", ignoreCase = true) }.sumOf { it.nominal }
             val saldo = totalIncome - totalExpense
 
             tvTotalSaldo.text = formatRupiah(saldo)
@@ -76,7 +73,7 @@ class HomeFragment : Fragment() {
             tvMiniIncome.text = formatRupiah(totalIncome)
             tvMiniExpense.text = formatRupiah(totalExpense)
 
-            transaksiAdapter.submitList(list.sortedByDescending { it.tanggal }.take(3))
+            transaksiAdapter.submitList(list.sortedByDescending { it.tanggal }.take(10))
         }
     }
 

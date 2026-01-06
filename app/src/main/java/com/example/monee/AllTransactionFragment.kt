@@ -9,11 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
 
@@ -30,9 +32,8 @@ class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
         viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
         val etSearch = view.findViewById<EditText>(R.id.etSearch)
+        val chipGroup = view.findViewById<ChipGroup>(R.id.chipGroupFilter)
         val chipAll = view.findViewById<Chip>(R.id.chipAll)
-        val chipIncome = view.findViewById<Chip>(R.id.chipIncome)
-        val chipExpense = view.findViewById<Chip>(R.id.chipExpense)
         val btnSort = view.findViewById<ImageView>(R.id.btnSort)
         val rv = view.findViewById<RecyclerView>(R.id.rvAllTransaksi)
         val tvCount = view.findViewById<TextView>(R.id.tvCount)
@@ -40,7 +41,8 @@ class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
 
         adapter = TransaksiAdapter(
             onEditClick = { transaksi ->
-                // TODO: Navigasi ke EditTransactionFragment
+                val bundle = Bundle().apply { putInt("transaksiId", transaksi.id) }
+                findNavController().navigate(R.id.action_allTransactionFragment_to_editTransactionFragment, bundle)
             },
             onDeleteClick = { transaksi ->
                 viewModel.delete(transaksi)
@@ -55,21 +57,12 @@ class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
             applyFilterAndSearch(etSearch.text.toString(), tvCount, tvEmpty)
         }
 
-        chipAll.setOnClickListener {
-            currentFilter = "Semua"
-            updateChipHighlight(chipAll, chipIncome, chipExpense)
-            applyFilterAndSearch(etSearch.text.toString(), tvCount, tvEmpty)
-        }
-
-        chipIncome.setOnClickListener {
-            currentFilter = "Pemasukan"
-            updateChipHighlight(chipAll, chipIncome, chipExpense)
-            applyFilterAndSearch(etSearch.text.toString(), tvCount, tvEmpty)
-        }
-
-        chipExpense.setOnClickListener {
-            currentFilter = "Pengeluaran"
-            updateChipHighlight(chipAll, chipIncome, chipExpense)
+        chipGroup.setOnCheckedChangeListener { _, checkedId ->
+            currentFilter = when (checkedId) {
+                R.id.chipIncome -> "Pemasukan"
+                R.id.chipExpense -> "Pengeluaran"
+                else -> "Semua"
+            }
             applyFilterAndSearch(etSearch.text.toString(), tvCount, tvEmpty)
         }
 
@@ -86,7 +79,7 @@ class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
             }
         })
 
-        updateChipHighlight(chipAll, chipIncome, chipExpense)
+        chipAll.isChecked = true
     }
 
     private fun applyFilterAndSearch(keyword: String, tvCount: TextView, tvEmpty: TextView) {
@@ -115,21 +108,5 @@ class AllTransactionFragment : Fragment(R.layout.fragment_all_transaction) {
         tvEmpty.visibility = if (result.isEmpty()) View.VISIBLE else View.GONE
 
         adapter.submitList(result)
-    }
-
-    private fun updateChipHighlight(chipAll: Chip, chipIncome: Chip, chipExpense: Chip) {
-
-        fun style(chip: Chip, active: Boolean) {
-            chip.setTextColor(
-                if (active)
-                    requireContext().getColor(R.color.primaryBlue)
-                else
-                    requireContext().getColor(R.color.textSecondary)
-            )
-        }
-
-        style(chipAll, currentFilter == "Semua")
-        style(chipIncome, currentFilter == "Pemasukan")
-        style(chipExpense, currentFilter == "Pengeluaran")
     }
 }

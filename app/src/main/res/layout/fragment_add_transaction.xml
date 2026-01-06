@@ -103,7 +103,6 @@
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
                 android:hint="Masukkan judul"
-                android:hintTextColor="?attr/colorSecondary"
                 app:hintEnabled="true"
                 app:endIconMode="clear_text">
 
@@ -134,7 +133,6 @@
                 app:startIconDrawable="@drawable/ic_money"
                 app:startIconTint="@color/textSecondary"
                 android:hint="Masukkan jumlah"
-                android:hintTextColor="?attr/colorSecondary"
                 app:hintEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -162,8 +160,7 @@
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
-                android:hint="Pilih kategori"
-                android:hintTextColor="?attr/colorSecondary">
+                android:hint="Pilih kategori">
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteCategory"
@@ -197,7 +194,6 @@
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_calendar"
                 android:hint="Pilih tanggal"
-                android:hintTextColor="?attr/colorSecondary"
                 app:hintEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -226,7 +222,6 @@
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
                 android:hint="Masukkan deskripsi"
-                android:hintTextColor="?attr/colorSecondary"
                 app:hintEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText

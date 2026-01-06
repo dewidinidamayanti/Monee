@@ -2,6 +2,8 @@ package com.example.monee
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -10,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.button.MaterialButton
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,12 +23,12 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     private lateinit var transaksiData: Transaksi
 
     private var selectedType = "Pengeluaran"
-    private var selectedTanggal: Long = System.currentTimeMillis()   // ⭐ prevent zero date bug
+    private var selectedTanggal: Long = System.currentTimeMillis()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java] // ⭐ samakan scope
+        viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
         val etTitle: EditText = view.findViewById(R.id.etTitle)
         val etAmount: EditText = view.findViewById(R.id.etAmount)
@@ -46,12 +49,13 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         }
 
         val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+        val formatter = DecimalFormat("#,###")
 
         viewModel.getById(transaksiId).observe(viewLifecycleOwner) { data ->
             transaksiData = data
 
             etTitle.setText(data.judul)
-            etAmount.setText(data.nominal.toString())
+            etAmount.setText(formatter.format(data.nominal))
             autoCategory.setText(data.kategori, false)
             etNote.setText(data.deskripsi)
 
@@ -61,6 +65,23 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             selectedType = data.tipe
             updateTypeUI(selectedType, btnExpense, btnIncome)
         }
+
+        etAmount.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                etAmount.removeTextChangedListener(this)
+                try {
+                    val originalString = s.toString()
+                    val longval = originalString.replace(",", "").toLong()
+                    etAmount.setText(formatter.format(longval))
+                    etAmount.setSelection(etAmount.text.length)
+                } catch (nfe: NumberFormatException) {
+                    // do nothing
+                }
+                etAmount.addTextChangedListener(this)
+            }
+        })
 
         btnExpense.setOnClickListener {
             selectedType = "Pengeluaran"
@@ -94,7 +115,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
             val updated = transaksiData.copy(
                 judul = etTitle.text.toString().trim(),
-                nominal = etAmount.text.toString().toDouble(),
+                nominal = etAmount.text.toString().replace(",", "").toDouble(),
                 kategori = autoCategory.text.toString(),
                 tipe = selectedType,
                 tanggal = selectedTanggal,
@@ -122,14 +143,14 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     }
 
     private fun updateTypeUI(type: String, btnExpense: MaterialButton, btnIncome: MaterialButton) {
-        if (type == "Pengeluaran") {
+        if (type.equals("Pengeluaran", ignoreCase = true)) {
             btnExpense.setBackgroundColor(requireContext().getColor(R.color.expenseRed))
             btnExpense.setTextColor(requireContext().getColor(android.R.color.white))
 
             btnIncome.setBackgroundColor(requireContext().getColor(android.R.color.white))
             btnIncome.setTextColor(requireContext().getColor(R.color.textSecondary))
         } else {
-            btnIncome.setBackgroundColor(requireContext().getColor(R.color.primaryBlue))
+            btnIncome.setBackgroundColor(requireContext().getColor(R.color.incomeGreen))
             btnIncome.setTextColor(requireContext().getColor(android.R.color.white))
 
             btnExpense.setBackgroundColor(requireContext().getColor(android.R.color.white))

@@ -22,7 +22,7 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[TransaksiViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
         val etTitle: EditText = view.findViewById(R.id.etTitle)
         val etAmount: EditText = view.findViewById(R.id.etAmount)
@@ -94,7 +94,7 @@ class AddTransactionFragment : Fragment(R.layout.fragment_add_transaction) {
             btnIncome.setBackgroundColor(requireContext().getColor(android.R.color.white))
             btnIncome.setTextColor(requireContext().getColor(R.color.textSecondary))
         } else {
-            btnIncome.setBackgroundColor(requireContext().getColor(R.color.primaryBlue))
+            btnIncome.setBackgroundColor(requireContext().getColor(R.color.incomeGreen))
             btnIncome.setTextColor(requireContext().getColor(android.R.color.white))
 
             btnExpense.setBackgroundColor(requireContext().getColor(android.R.color.white))

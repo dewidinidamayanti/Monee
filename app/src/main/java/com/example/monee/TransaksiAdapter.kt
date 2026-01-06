@@ -46,7 +46,7 @@ class TransaksiAdapter(
             val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
             tvDate.text = sdf.format(Date(item.tanggal))
 
-            if (item.tipe == "pemasukan") {
+            if (item.tipe.equals("pemasukan", ignoreCase = true)) {
                 tvAmount.text = "+ ${formatRupiah(item.nominal)}"
                 tvAmount.setTextColor(itemView.context.getColor(R.color.incomeGreen))
 

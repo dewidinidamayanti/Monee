@@ -18,13 +18,12 @@ class SplashActivity : AppCompatActivity() {
         val dot2 = findViewById<View>(R.id.dot2)
         val dot3 = findViewById<View>(R.id.dot3)
 
-        val animation = AnimationUtils.loadAnimation(this, R.anim.dot_animation)
+        val anim = AnimationUtils.loadAnimation(this, R.anim.dot_animation)
 
-        dot1.startAnimation(animation)
-        animation.startOffset = 200
-        dot2.startAnimation(animation)
-        animation.startOffset = 400
-        dot3.startAnimation(animation)
+        // Start animations with delay
+        dot1.startAnimation(anim)
+        Handler(Looper.getMainLooper()).postDelayed({ dot2.startAnimation(anim) }, 200)
+        Handler(Looper.getMainLooper()).postDelayed({ dot3.startAnimation(anim) }, 400)
 
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))

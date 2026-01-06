@@ -33,6 +33,9 @@
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_allTransactionFragment_to_editTransactionFragment"
+            app:destination="@id/editTransactionFragment" />
     </fragment>
 
     <fragment
