@@ -6,11 +6,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
+import java.text.DecimalFormat
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -43,7 +45,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         rvTransaksi.adapter = transaksiAdapter
 
         tvLihatSemua.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_allTransactionFragment)
+            // GANTI baris ini:
+            // findNavController().navigate(R.id.action_homeFragment_to_allTransactionFragment)
+
+            // MENJADI seperti ini:
+            findNavController().navigate(
+                R.id.action_homeFragment_to_allTransactionFragment,
+                null, // Tidak ada bundle
+                NavOptions.Builder()
+                    .setRestoreState(true) // Simpan state saat kembali
+                    .setLaunchSingleTop(true) // Hindari menumpuk fragmen yang sama
+                    .build()
+            )
         }
 
         viewModel.allTransaksi.observe(viewLifecycleOwner) { list ->
@@ -87,6 +100,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun formatRupiah(amount: Double): String {
-        return "Rp" + String.format("%,.0f", amount)
+        val formatter = DecimalFormat("#,###")
+        val symbols = formatter.decimalFormatSymbols
+        symbols.groupingSeparator = '.'
+        formatter.decimalFormatSymbols = symbols
+        formatter.isGroupingUsed = true
+        formatter.maximumFractionDigits = 0
+        return "Rp${formatter.format(amount)}"
     }
 }

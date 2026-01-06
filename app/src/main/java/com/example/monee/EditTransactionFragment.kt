@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -13,8 +17,11 @@ import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.button.MaterialButton
 import java.text.DecimalFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
@@ -66,22 +73,8 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             updateTypeUI(selectedType, btnExpense, btnIncome)
         }
 
-        etAmount.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                etAmount.removeTextChangedListener(this)
-                try {
-                    val originalString = s.toString()
-                    val longval = originalString.replace(",", "").toLong()
-                    etAmount.setText(formatter.format(longval))
-                    etAmount.setSelection(etAmount.text.length)
-                } catch (nfe: NumberFormatException) {
-                    // do nothing
-                }
-                etAmount.addTextChangedListener(this)
-            }
-        })
+        // Menggunakan CurrencyTextWatcher yang sudah didefinisikan di bawah
+        etAmount.addTextChangedListener(CurrencyTextWatcher(etAmount))
 
         btnExpense.setOnClickListener {
             selectedType = "Pengeluaran"
@@ -113,9 +106,13 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                 return@setOnClickListener
             }
 
+            val nominalString = etAmount.text.toString().replace(".", "")
+
+            val nominalValue = if (nominalString.isNotEmpty()) nominalString.toDouble() else 0.0
+
             val updated = transaksiData.copy(
                 judul = etTitle.text.toString().trim(),
-                nominal = etAmount.text.toString().replace(",", "").toDouble(),
+                nominal = nominalValue,
                 kategori = autoCategory.text.toString(),
                 tipe = selectedType,
                 tanggal = selectedTanggal,
@@ -156,5 +153,52 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             btnExpense.setBackgroundColor(requireContext().getColor(android.R.color.white))
             btnExpense.setTextColor(requireContext().getColor(R.color.textSecondary))
         }
+    }
+}
+
+class CurrencyTextWatcher(private val editText: EditText) : TextWatcher {
+
+    private val decimalFormat = DecimalFormat("#,###")
+    init {
+        // Ini untuk memastikan formatnya menggunakan titik sebagai pemisah ribuan
+        // sesuai dengan Locale Indonesia.
+        decimalFormat.isGroupingUsed = true
+        decimalFormat.maximumFractionDigits = 0
+        val symbols = decimalFormat.decimalFormatSymbols
+        symbols.groupingSeparator = '.'
+        decimalFormat.decimalFormatSymbols = symbols
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+    override fun afterTextChanged(s: Editable?) {
+        editText.removeTextChangedListener(this)
+
+        try {
+            var originalString = s.toString()
+
+            // Hapus semua karakter non-digit (koma, titik, dll)
+            originalString = originalString.replace("[^\\d]".toRegex(), "")
+
+            if (originalString.isNotEmpty()) {
+                val longval = originalString.toLong()
+                val formattedString = decimalFormat.format(longval)
+
+                // Setel teks yang sudah diformat ke EditText
+                editText.setText(formattedString)
+                editText.setSelection(editText.text.length)
+            } else {
+                editText.setText("")
+            }
+        } catch (nfe: NumberFormatException) {
+            // Tangani jika terjadi kesalahan parsing (misal, angka terlalu besar)
+            nfe.printStackTrace()
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        editText.addTextChangedListener(this)
     }
 }
