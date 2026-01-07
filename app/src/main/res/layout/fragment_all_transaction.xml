@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/bgLight"
     android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         android:padding="16dp">
 
         <TextView
-            android:text="Monee"
+            android:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -48,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="48dp"
-                android:hint="Cari transaksi..."
+                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:textSize="14sp"/>
@@ -75,7 +76,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Semua"
+                    android:text="@string/semua"
                     android:checked="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -83,14 +84,14 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pemasukan"/>
+                    android:text="@string/pemasukan"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipExpense"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pengeluaran"/>
+                    android:text="@string/pengeluaran"/>
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -106,7 +107,7 @@
 
             <TextView
                 android:id="@+id/tvCount"
-                android:text="0 Transaksi"
+                android:text="@string/kosong"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -127,7 +128,7 @@
 
         <TextView
             android:id="@+id/tvEmpty"
-            android:text="Belum ada transaksi"
+            android:text="@string/belum_ada_transaksi"
             android:textSize="16sp"
             android:gravity="center"
             android:visibility="gone"
@@ -135,11 +136,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAllTransaksi"
-            android:layout_marginTop="8dp"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_marginTop="8dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAllTransaksi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 </LinearLayout>

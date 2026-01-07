@@ -42,10 +42,6 @@ class AllTransactionFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
-        // 4. Hapus semua `findViewById`, kita akan gunakan `binding`
-        // val etSearch = view.findViewById<EditText>(R.id.etSearch)
-        // ...dan seterusnya...
-
         adapter = TransaksiAdapter(
             onEditClick = { transaksi ->
                 val bundle = Bundle().apply { putInt("transaksiId", transaksi.id) }
@@ -60,7 +56,17 @@ class AllTransactionFragment : Fragment() {
         binding.rvAllTransaksi.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAllTransaksi.adapter = adapter
 
+        // Tampilkan ProgressBar sebelum mengamati data
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvAllTransaksi.visibility = View.GONE
+
+
         viewModel.allTransaksi.observe(viewLifecycleOwner) {
+            // Sembunyikan ProgressBar setelah data diterima
+            binding.progressBar.visibility = View.GONE
+            binding.rvAllTransaksi.visibility = View.VISIBLE // Tampilkan RecyclerView lagi
+
+
             allList = it
             applyFilterAndSearch(binding.etSearch.text.toString())
         }

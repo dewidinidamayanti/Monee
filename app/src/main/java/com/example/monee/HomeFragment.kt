@@ -10,15 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.monee.databinding.FragmentHomeBinding // Impor kelas binding
+import com.example.monee.databinding.FragmentHomeBinding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import java.text.DecimalFormat
-
-// Hapus R.layout.fragment_home dari sini
 class HomeFragment : Fragment() {
 
-    // Deklarasi variabel binding
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -40,8 +37,6 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
-        // Hapus semua `view.findViewById`
-
         transaksiAdapter = TransaksiAdapter(
             onEditClick = { transaksi ->
                 val bundle = Bundle().apply { putInt("transaksiId", transaksi.id) }
@@ -50,7 +45,6 @@ class HomeFragment : Fragment() {
             onDeleteClick = { transaksi -> confirmDelete(transaksi) }
         )
 
-        // Gunakan `binding` untuk mengakses view
         binding.rvTransaksiTerkini.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTransaksiTerkini.adapter = transaksiAdapter
 
@@ -65,34 +59,60 @@ class HomeFragment : Fragment() {
             )
         }
 
+        // Tampilkan ProgressBar sebelum mengamati data
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvTransaksiTerkini.visibility = View.GONE // Sembunyikan daftar saat loading
+
         viewModel.allTransaksi.observe(viewLifecycleOwner) { list ->
-            if (list.isNullOrEmpty()) {
-                binding.tvTotalSaldo.text = "Rp0"
-                binding.tvTotalPemasukan.text = "Rp0"
-                binding.tvTotalPengeluaran.text = "Rp0"
-                binding.tvMiniIncome.text = "Rp0"
-                binding.tvMiniExpense.text = "Rp0"
-                transaksiAdapter.submitList(emptyList())
-                binding.tvHomeEmpty.visibility = View.VISIBLE
-                binding.rvTransaksiTerkini.visibility = View.GONE
-                return@observe
+            try {
+                // Selalu sembunyikan ProgressBar saat data diterima (sukses atau gagal di awal)
+                binding.progressBar.visibility = View.GONE
+
+                if (list.isNullOrEmpty()) {
+                    // Blok ini dieksekusi jika daftar transaksi kosong
+                    binding.tvTotalSaldo.text = "Rp0"
+                    binding.tvTotalPemasukan.text = "Rp0"
+                    binding.tvTotalPengeluaran.text = "Rp0"
+                    binding.tvMiniIncome.text = "Rp0"
+                    binding.tvMiniExpense.text = "Rp0"
+
+                    transaksiAdapter.submitList(emptyList()) // Kosongkan adapter
+                    binding.tvHomeEmpty.visibility = View.VISIBLE // Tampilkan pesan "kosong"
+                    binding.rvTransaksiTerkini.visibility = View.GONE // Sembunyikan daftar
+                    return@observe // Keluar dari observe karena tidak ada lagi yang perlu diproses
+                }
+
+                // Jika daftar tidak kosong, lanjutkan di sini
+                binding.tvHomeEmpty.visibility = View.GONE // Sembunyikan pesan "kosong"
+                binding.rvTransaksiTerkini.visibility = View.VISIBLE // Tampilkan daftar
+
+                // Lakukan kalkulasi
+                val totalIncome = list.filter { it.tipe.equals("Pemasukan", ignoreCase = true) }.sumOf { it.nominal }
+                val totalExpense = list.filter { it.tipe.equals("Pengeluaran", ignoreCase = true) }.sumOf { it.nominal }
+                val saldo = totalIncome - totalExpense
+
+                // Update UI dengan data yang sudah diformat
+                binding.tvTotalSaldo.text = formatRupiah(saldo)
+                binding.tvTotalPemasukan.text = formatRupiah(totalIncome)
+                binding.tvTotalPengeluaran.text = formatRupiah(totalExpense)
+                binding.tvMiniIncome.text = formatRupiah(totalIncome)
+                binding.tvMiniExpense.text = formatRupiah(totalExpense)
+
+                // Tampilkan 10 transaksi terbaru ke RecyclerView
+                transaksiAdapter.submitList(list.sortedByDescending { it.tanggal }.take(10))
+
+            } catch (e: Exception) {
+                // Blok ini hanya berjalan jika terjadi error tak terduga (misal saat formatRupiah)
+                binding.progressBar.visibility = View.GONE // Pastikan ProgressBar tetap hilang
+                binding.rvTransaksiTerkini.visibility = View.GONE // Sembunyikan daftar
+                binding.tvHomeEmpty.visibility = View.VISIBLE // Tampilkan pesan error
+                binding.tvHomeEmpty.text = "Gagal memuat data" // Beri tahu pengguna ada masalah
+
+                android.util.Log.e("HomeFragment", "Gagal memproses daftar transaksi", e)
             }
-
-            binding.tvHomeEmpty.visibility = View.GONE
-            binding.rvTransaksiTerkini.visibility = View.VISIBLE
-
-            val totalIncome = list.filter { it.tipe.equals("Pemasukan", ignoreCase = true) }.sumOf { it.nominal }
-            val totalExpense = list.filter { it.tipe.equals("Pengeluaran", ignoreCase = true) }.sumOf { it.nominal }
-            val saldo = totalIncome - totalExpense
-
-            binding.tvTotalSaldo.text = formatRupiah(saldo)
-            binding.tvTotalPemasukan.text = formatRupiah(totalIncome)
-            binding.tvTotalPengeluaran.text = formatRupiah(totalExpense)
-            binding.tvMiniIncome.text = formatRupiah(totalIncome)
-            binding.tvMiniExpense.text = formatRupiah(totalExpense)
-
-            transaksiAdapter.submitList(list.sortedByDescending { it.tanggal }.take(10))
         }
+
+
     }
 
     private fun confirmDelete(transaksi: Transaksi) {

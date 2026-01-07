@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgLight"
@@ -20,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monee"
+                android:text="@string/app_name"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
@@ -32,128 +33,136 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_total_saldo"
                 android:padding="16dp"
-                android:elevation="4dp"
-                android:orientation="vertical">
+                android:elevation="4dp">
 
-                <LinearLayout
+                <!-- TOTAL SALDO -->
+                <ImageView
+                    android:id="@+id/ivWalletIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_wallet"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvLabelTotalSaldo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_wallet"
-                        android:layout_marginEnd="8dp"/>
-
-                    <TextView
-                        android:text="Total Saldo"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
+                    android:layout_marginStart="8dp"
+                    android:text="@string/total_saldo"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/ivWalletIcon"
+                    app:layout_constraintStart_toEndOf="@id/ivWalletIcon"
+                    app:layout_constraintTop_toTopOf="@id/ivWalletIcon" />
 
                 <TextView
                     android:id="@+id/tvTotalSaldo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rp0"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/Orp"
                     android:textColor="@android:color/white"
-                    android:textStyle="bold"
                     android:textSize="28sp"
-                    android:layout_marginTop="8dp" />
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivWalletIcon" />
 
+                <!-- PEMASUKAN -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/layoutPemasukan"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="start|center_vertical"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="50dp">
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTotalSaldo">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_trending_up" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_trending_up"
-                            android:layout_marginEnd="8dp"/>
-
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:text="@string/pemasukan2"
+                            android:textColor="@android:color/white" />
 
-                            <TextView
-                                android:text="Pemasukan:"
-                                android:textColor="@android:color/white"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-
-                            <TextView
-                                android:id="@+id/tvTotalPemasukan"
-                                android:text="Rp0"
-                                android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:layout_marginTop="2dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_trending_down"
-                            android:layout_marginEnd="8dp"/>
-
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/tvTotalPemasukan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:text="Pengeluaran:"
-                                android:textColor="@android:color/white"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-
-                            <TextView
-                                android:id="@+id/tvTotalPengeluaran"
-                                android:text="Rp0"
-                                android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:layout_marginTop="2dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </LinearLayout>
-
+                            android:layout_marginTop="2dp"
+                            android:text="@string/Orp"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold" />
                     </LinearLayout>
-
                 </LinearLayout>
-            </LinearLayout>
+
+                <!-- PENGELUARAN -->
+                <LinearLayout
+                    android:id="@+id/layoutPengeluaran"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="@id/layoutPemasukan">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_trending_down" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pengeluaran2"
+                            android:textColor="@android:color/white" />
+
+                        <TextView
+                            android:id="@+id/tvTotalPengeluaran"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/Orp"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Guideline untuk membagi layar menjadi dua -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -191,7 +200,7 @@
                     </FrameLayout>
 
                     <TextView
-                        android:text="Pemasukan"
+                        android:text="@string/pemasukan"
                         android:textSize="13sp"
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
@@ -199,7 +208,7 @@
 
                     <TextView
                         android:id="@+id/tvMiniIncome"
-                        android:text="Rp0"
+                        android:text="@string/Orp"
                         android:textColor="@color/incomeGreen"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
@@ -236,7 +245,7 @@
                     </FrameLayout>
 
                     <TextView
-                        android:text="Pengeluaran"
+                        android:text="@string/pengeluaran"
                         android:textSize="13sp"
                         android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
@@ -244,7 +253,7 @@
 
                     <TextView
                         android:id="@+id/tvMiniExpense"
-                        android:text="Rp0"
+                        android:text="@string/Orp"
                         android:textColor="@color/expenseRed"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
@@ -260,7 +269,7 @@
                 android:layout_marginTop="24dp">
 
                 <TextView
-                    android:text="Transaksi Terkini"
+                    android:text="@string/transaksi_terkini"
                     android:textStyle="bold"
                     android:textSize="16sp"
                     android:layout_width="wrap_content"
@@ -273,22 +282,45 @@
 
                 <TextView
                     android:id="@+id/tvLihatSemua"
-                    android:text="Lihat Semua"
+                    android:text="@string/lihat_semua"
                     android:textColor="@color/primaryBlue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTransaksiTerkini"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginTop="12dp" />
+                android:layout_marginTop="12dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTransaksiTerkini"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:elevation="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <TextView
                 android:id="@+id/tvHomeEmpty"
-                android:text="Belum ada transaksi"
+                android:text="@string/belum_ada_transaksi"
                 android:textSize="16sp"
                 android:gravity="center"
                 android:visibility="gone"

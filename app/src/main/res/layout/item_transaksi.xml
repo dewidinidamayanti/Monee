@@ -108,7 +108,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:background="@drawable/bg_circle_red_soft"
-                android:contentDescription="Hapus Transaksi"
+                android:contentDescription="@string/hapus_transaksi"
                 app:srcCompat="@drawable/ic_delete"
                 app:tint="?attr/colorError" />
 
