@@ -1,7 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for Night/Dark mode using YOUR adapted colors. -->
     <style name="Base.Theme.Monee" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryBlue</item>
+        <item name="colorOnPrimary">#000000</item> <!-- Teks di atas biru terang menjadi hitam agar kontras -->
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primaryBlue</item>
+        <item name="colorOnSecondary">#000000</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">false</item> <!-- Ikon status bar menjadi terang -->
+
+        <!-- Background and surface colors -->
+        <item name="android:colorBackground">@color/bgLight</item> <!-- Akan mengambil dari values-night/colors.xml -->
+        <item name="colorSurface">@color/gray200</item> <!-- Warna untuk kartu di mode gelap -->
+        <item name="colorOnSurface">@color/textPrimary</item> <!-- Teks utama di atas surface -->
+        <item name="colorOnSurfaceVariant">@color/textSecondary</item> <!-- Teks sekunder -->
+
+        <!-- Error color for validation, delete buttons etc. -->
+        <item name="colorError">@color/expenseRed</item>
     </style>
+
+    <style name="Theme.Monee" parent="Base.Theme.Monee" />
 </resources>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.monee.db.Transaksi
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.monee.databinding.ItemTransaksiBinding
 
 class TransaksiAdapter(
     private val onEditClick: (Transaksi) -> Unit,
@@ -27,52 +28,43 @@ class TransaksiAdapter(
         }
     }
 
-    inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val ivIcon: ImageView = itemView.findViewById(R.id.ivIcon)
-        private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
-        private val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
-        private val tvDate: TextView = itemView.findViewById(R.id.tvDate)
-        private val tvAmount: TextView = itemView.findViewById(R.id.tvAmount)
-        private val btnDelete: ImageView = itemView.findViewById(R.id.btnDelete)
+    // Ubah parameter ViewHolder dari View menjadi ItemTransaksiBinding
+    inner class VH(private val binding: ItemTransaksiBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val iconBg: View = itemView.findViewById(R.id.iconBg)
+        // Tidak perlu findViewById lagi!
 
         fun bind(item: Transaksi) {
+            // Langsung akses view dari objek binding
+            binding.tvTitle.text = item.judul
+            binding.tvCategory.text = item.kategori
 
-            tvTitle.text = item.judul
-            tvCategory.text = item.kategori
-
-            val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
-            tvDate.text = sdf.format(Date(item.tanggal))
+            val sdf = SimpleDateFormat("dd MMM yyyy", Locale.Builder().setLanguage("id").setRegion("ID").build())
+            binding.tvDate.text = sdf.format(Date(item.tanggal))
 
             if (item.tipe.equals("pemasukan", ignoreCase = true)) {
-                tvAmount.text = "+ ${formatRupiah(item.nominal)}"
-                tvAmount.setTextColor(itemView.context.getColor(R.color.incomeGreen))
-
-                ivIcon.setColorFilter(itemView.context.getColor(R.color.incomeGreen))
-                iconBg.setBackgroundResource(R.drawable.bg_circle_green_soft)
-
+                binding.tvAmount.text = "+ ${formatRupiah(item.nominal)}"
+                binding.tvAmount.setTextColor(itemView.context.getColor(R.color.incomeGreen))
+                binding.ivIcon.setColorFilter(itemView.context.getColor(R.color.incomeGreen))
+                binding.iconBg.setBackgroundResource(R.drawable.bg_circle_green_soft)
             } else {
-                tvAmount.text = "- ${formatRupiah(item.nominal)}"
-                tvAmount.setTextColor(itemView.context.getColor(R.color.expenseRed))
-
-                ivIcon.setColorFilter(itemView.context.getColor(R.color.expenseRed))
-                iconBg.setBackgroundResource(R.drawable.bg_circle_red_soft)
+                binding.tvAmount.text = "- ${formatRupiah(item.nominal)}"
+                binding.tvAmount.setTextColor(itemView.context.getColor(R.color.expenseRed))
+                binding.ivIcon.setColorFilter(itemView.context.getColor(R.color.expenseRed))
+                binding.iconBg.setBackgroundResource(R.drawable.bg_circle_red_soft)
             }
 
+            binding.ivIcon.setImageResource(getCategoryIcon(item.kategori))
 
-            ivIcon.setImageResource(getCategoryIcon(item.kategori))
-
-            btnDelete.setOnClickListener { onDeleteClick(item) }
+            binding.btnDelete.setOnClickListener { onDeleteClick(item) }
             itemView.setOnClickListener { onEditClick(item) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_transaksi, parent, false)
-        return VH(view)
+        // Gunakan binding untuk inflate layout
+        val binding = ItemTransaksiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return VH(binding)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -92,6 +84,8 @@ class TransaksiAdapter(
             "perumahan" -> R.drawable.ic_perumahan
             "hiburan" -> R.drawable.ic_hiburan
             "kesehatan" -> R.drawable.ic_kesehatan
+            "gaji" -> R.drawable.ic_gaji
+            "hadiah" -> R.drawable.ic_hadiah
             else -> R.drawable.ic_lainnya
         }
     }

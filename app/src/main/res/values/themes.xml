@@ -1,8 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for Day/Light mode using YOUR existing colors. -->
     <style name="Base.Theme.Monee" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryBlue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primaryBlue</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">true</item> <!-- Ikon status bar menjadi gelap -->
+
+        <!-- Background and surface colors -->
+        <item name="android:colorBackground">@color/bgLight</item> <!-- Latar belakang utama aplikasi Anda -->
+        <item name="colorSurface">@color/white</item> <!-- Warna untuk "permukaan" seperti kartu/card -->
+        <item name="colorOnSurface">@color/textPrimary</item> <!-- Warna teks utama di atas surface -->
+        <item name="colorOnSurfaceVariant">@color/textSecondary</item> <!-- Warna teks sekunder -->
+
+        <!-- Error color for validation, delete buttons etc. -->
+        <item name="colorError">@color/expenseRed</item>
     </style>
 
     <style name="Theme.Monee" parent="Base.Theme.Monee" />

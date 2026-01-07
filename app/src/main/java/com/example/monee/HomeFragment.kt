@@ -1,37 +1,46 @@
 package com.example.monee
 
 import android.os.Bundle
-import android.view.*
-import android.widget.TextView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.monee.databinding.FragmentHomeBinding // Impor kelas binding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import java.text.DecimalFormat
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+// Hapus R.layout.fragment_home dari sini
+class HomeFragment : Fragment() {
+
+    // Deklarasi variabel binding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: TransaksiViewModel
     private lateinit var transaksiAdapter: TransaksiAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate layout menggunakan binding
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root // Kembalikan root view dari binding
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
-        val tvTotalSaldo = view.findViewById<TextView>(R.id.tvTotalSaldo)
-        val tvTotalPemasukan = view.findViewById<TextView>(R.id.tvTotalPemasukan)
-        val tvTotalPengeluaran = view.findViewById<TextView>(R.id.tvTotalPengeluaran)
-        val tvMiniIncome = view.findViewById<TextView>(R.id.tvMiniIncome)
-        val tvMiniExpense = view.findViewById<TextView>(R.id.tvMiniExpense)
-        val tvHomeEmpty = view.findViewById<TextView>(R.id.tvHomeEmpty)
-        val tvLihatSemua = view.findViewById<TextView>(R.id.tvLihatSemua)
-        val rvTransaksi = view.findViewById<RecyclerView>(R.id.rvTransaksiTerkini)
+        // Hapus semua `view.findViewById`
 
         transaksiAdapter = TransaksiAdapter(
             onEditClick = { transaksi ->
@@ -41,14 +50,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             onDeleteClick = { transaksi -> confirmDelete(transaksi) }
         )
 
-        rvTransaksi.layoutManager = LinearLayoutManager(requireContext())
-        rvTransaksi.adapter = transaksiAdapter
+        // Gunakan `binding` untuk mengakses view
+        binding.rvTransaksiTerkini.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTransaksiTerkini.adapter = transaksiAdapter
 
-        tvLihatSemua.setOnClickListener {
-            // GANTI baris ini:
-            // findNavController().navigate(R.id.action_homeFragment_to_allTransactionFragment)
-
-            // MENJADI seperti ini:
+        binding.tvLihatSemua.setOnClickListener {
             findNavController().navigate(
                 R.id.action_homeFragment_to_allTransactionFragment,
                 null, // Tidak ada bundle
@@ -60,31 +66,30 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         viewModel.allTransaksi.observe(viewLifecycleOwner) { list ->
-
             if (list.isNullOrEmpty()) {
-                tvTotalSaldo.text = "Rp0"
-                tvTotalPemasukan.text = "Rp0"
-                tvTotalPengeluaran.text = "Rp0"
-                tvMiniIncome.text = "Rp0"
-                tvMiniExpense.text = "Rp0"
+                binding.tvTotalSaldo.text = "Rp0"
+                binding.tvTotalPemasukan.text = "Rp0"
+                binding.tvTotalPengeluaran.text = "Rp0"
+                binding.tvMiniIncome.text = "Rp0"
+                binding.tvMiniExpense.text = "Rp0"
                 transaksiAdapter.submitList(emptyList())
-                tvHomeEmpty.visibility = View.VISIBLE
-                rvTransaksi.visibility = View.GONE
+                binding.tvHomeEmpty.visibility = View.VISIBLE
+                binding.rvTransaksiTerkini.visibility = View.GONE
                 return@observe
             }
 
-            tvHomeEmpty.visibility = View.GONE
-            rvTransaksi.visibility = View.VISIBLE
+            binding.tvHomeEmpty.visibility = View.GONE
+            binding.rvTransaksiTerkini.visibility = View.VISIBLE
 
             val totalIncome = list.filter { it.tipe.equals("Pemasukan", ignoreCase = true) }.sumOf { it.nominal }
             val totalExpense = list.filter { it.tipe.equals("Pengeluaran", ignoreCase = true) }.sumOf { it.nominal }
             val saldo = totalIncome - totalExpense
 
-            tvTotalSaldo.text = formatRupiah(saldo)
-            tvTotalPemasukan.text = formatRupiah(totalIncome)
-            tvTotalPengeluaran.text = formatRupiah(totalExpense)
-            tvMiniIncome.text = formatRupiah(totalIncome)
-            tvMiniExpense.text = formatRupiah(totalExpense)
+            binding.tvTotalSaldo.text = formatRupiah(saldo)
+            binding.tvTotalPemasukan.text = formatRupiah(totalIncome)
+            binding.tvTotalPengeluaran.text = formatRupiah(totalExpense)
+            binding.tvMiniIncome.text = formatRupiah(totalIncome)
+            binding.tvMiniExpense.text = formatRupiah(totalExpense)
 
             transaksiAdapter.submitList(list.sortedByDescending { it.tanggal }.take(10))
         }
@@ -107,5 +112,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         formatter.isGroupingUsed = true
         formatter.maximumFractionDigits = 0
         return "Rp${formatter.format(amount)}"
+    }
+
+    // Penting: Bersihkan referensi binding untuk menghindari memory leak
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

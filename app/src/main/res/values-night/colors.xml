@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Palet warna Anda, diadaptasi untuk Mode Gelap -->
+
+    <color name="bgLight">#121212</color> <!-- Latar belakang utama menjadi gelap -->
+
+    <!-- Biru dibuat lebih terang agar kontras di latar gelap -->
+    <color name="primaryBlue">#8AB4F8</color>
+    <color name="primaryBlueDark">#5C85D6</color>
+
+    <!-- Warna teks dibalik, menjadi terang -->
+    <color name="textPrimary">#E0E0E0</color> <!-- Putih pudar -->
+    <color name="textSecondary">#A0A0A0</color> <!-- Abu-abu terang -->
+
+    <!-- Warna fungsional dibuat lebih terang -->
+    <color name="incomeGreen">#81C784</color>
+    <color name="expenseRed">#E57373</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="lightGrey">#333333</color> <!-- Abu-abu gelap untuk surface/kartu -->
+    <color name="darkGrey">#555555</color>
+    <color name="gray200">#2C2C2C</color>
+</resources>

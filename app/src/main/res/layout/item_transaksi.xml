@@ -1,125 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- 1. Bungkus dengan MaterialCardView untuk tampilan kartu -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
-    android:background="@color/white">
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="14dp"
-        android:gravity="center_vertical"
-        android:baselineAligned="false">
+        android:background="?attr/colorSurface"
+        android:padding="16dp">
 
         <FrameLayout
             android:id="@+id/iconBg"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/bg_circle_red_soft"
-            android:layout_marginEnd="12dp">
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/ivIcon"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_makanan"
-                app:tint="@color/expenseRed"
-                android:contentDescription="@string/des_ikon_kategori" />
+                android:importantForAccessibility="no"
+                app:srcCompat="@drawable/ic_makanan"
+                app:tint="?attr/colorError" />
         </FrameLayout>
 
-        <LinearLayout
+        <!-- Judul Transaksi -->
+        <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintEnd_toStartOf="@+id/tvAmount"
+            app:layout_constraintStart_toEndOf="@id/iconBg"
+            app:layout_constraintTop_toTopOf="@+id/iconBg"
+            tools:text="Beli Makan Siang di Warteg" />
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Martabak manis"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/textPrimary" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tvCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Makanan"
-                    android:textSize="12sp"
-                    android:textColor="@color/textSecondary"
-                    android:layout_marginTop="2dp" />
-
-                <View
-                    android:layout_width="5dp"
-                    android:layout_height="5dp"
-                    android:background="@drawable/dot_grey"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginTop="2.5dp"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12 Feb 2025"
-                    android:textSize="11sp"
-                    android:textColor="@color/textSecondary"
-                    android:layout_marginTop="2dp" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
+        <!-- Kategori & Tanggal -->
+        <TextView
+            android:id="@+id/tvCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="Makanan" />
 
-            <TextView
-                android:id="@+id/tvAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+Rp50.000"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/expenseRed"
-                android:layout_marginEnd="10dp" />
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvCategory"
+            app:layout_constraintStart_toEndOf="@+id/tvCategory"
+            tools:text="• 20 Mei 2024" />
 
-            <FrameLayout
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/bg_retangle_red"
-                android:gravity="center">
+        <!-- Nominal -->
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/deleteBg"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="-Rp15.000"
+            tools:textColor="@color/expenseRed" />
 
-                <ImageView
-                    android:id="@+id/btnDelete"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_delete"
-                    app:tint="@color/expenseRed"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/des_tombol_hapus" />
-            </FrameLayout>
+        <!-- Tombol Hapus dengan Frame Latar Belakang -->
+        <FrameLayout
+            android:id="@+id/deleteBg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_retangle_red"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/btnDelete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_circle_red_soft"
+                android:contentDescription="Hapus Transaksi"
+                app:srcCompat="@drawable/ic_delete"
+                app:tint="?attr/colorError" />
 
-    </LinearLayout>
+        </FrameLayout>
 
-</androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
