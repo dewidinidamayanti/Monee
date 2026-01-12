@@ -1,171 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@color/bgLight"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bgLight">
 
     <!-- HEADER -->
     <LinearLayout
+        android:id="@+id/header_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primaryBlue"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_all">
 
         <!-- SEARCH -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_search"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxBackgroundMode="outline"
-            app:startIconDrawable="@drawable/ic_search"
-            app:startIconTint="@color/textSecondary"
-            app:hintEnabled="false"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusTopStart="10dp">
+            app:boxCornerRadiusTopStart="10dp"
+            app:hintEnabled="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@color/textSecondary">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etSearch"
+                android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="48dp"
-                android:hint="@string/search"
+                android:hint="@string/cari_transaksi"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- FILTER -->
-        <LinearLayout
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_filter"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/til_search"
+            app:selectionRequired="true"
+            app:singleSelection="true">
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupFilter"
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_all"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                app:singleSelection="true"
-                app:selectionRequired="true">
+                android:checked="true"
+                android:text="@string/semua" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipAll"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/semua"
-                    android:checked="true"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_income"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pemasukan" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipIncome"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pemasukan"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_expense"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pengeluaran" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipExpense"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pengeluaran"/>
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </LinearLayout>
+        </com.google.android.material.chip.ChipGroup>
 
         <!-- COUNT + SORT -->
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_sort_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/chip_group_filter">
 
             <TextView
-                android:id="@+id/tvCount"
-                android:text="@string/kosong"
-                android:textStyle="bold"
+                android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:id="@+id/btnSort"
-                android:src="@drawable/ic_sort"
-                app:tint="@color/textSecondary"
-                android:padding="6dp"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvEmpty"
-            android:text="@string/belum_ada_transaksi"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_marginTop="32dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="8dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvAllTransaksi"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/jumlah_transaksi"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:elevation="10dp"
+            <ImageView
+                android:id="@+id/btn_sort"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:importantForAccessibility="no"
+                android:padding="6dp"
+                android:src="@drawable/ic_sort"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
-
+                app:tint="@color/textSecondary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-</LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_all_transaksi"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_sort_header"
+            tools:listitem="@layout/item_transaksi" />
+
+        <TextView
+            android:id="@+id/tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="@string/belum_ada_transaksi"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/layout_sort_header" />
+
+        <ProgressBar
+            android:id="@+id/pb_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

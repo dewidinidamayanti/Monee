@@ -6,38 +6,47 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.monee.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
-        // Hubungkan BottomNavigationView dengan NavController seperti biasa
-        bottomNav.setupWithNavController(navController)
+        // Hubungkan BottomNavigationView
+        binding.bottomNav.setupWithNavController(navController)
 
-        // --- INI BAGIAN PENTINGNYA ---
-        // Tambahkan listener untuk menangani klik ulang pada item yang sama
-        bottomNav.setOnItemSelectedListener { item ->
-            // Gunakan NavigationUI untuk menangani navigasi standar
-            NavigationUI.onNavDestinationSelected(item, navController)
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            val currentDestination = navController.currentDestination?.id
 
-            // Cek apakah item yang diklik adalah item yang sedang aktif
-            if (navController.currentDestination?.id == navController.graph.startDestinationId && item.itemId == navController.graph.startDestinationId) {
-                // Ini untuk kasus khusus jika kita sudah di home dan klik home lagi (opsional)
-                // Tidak melakukan apa-apa atau bisa scroll ke atas
-            } else if (item.itemId == navController.graph.startDestinationId) {
-                // Jika item yang diklik adalah tujuan awal (home), tapi kita tidak di sana,
-                // maka pop up tumpukan navigasi kembali ke home.
+            // Jika user klik menu yang sama → tidak lakukan apa-apa
+            if (currentDestination == item.itemId) {
+                return@setOnItemSelectedListener true
+            }
+
+            // Lakukan navigasi normal
+            val handled = NavigationUI.onNavDestinationSelected(item, navController)
+
+            // Jika klik Home dari halaman manapun → bersihkan backstack ke Home
+            if (item.itemId == navController.graph.startDestinationId) {
                 navController.popBackStack(navController.graph.startDestinationId, false)
             }
-            true
+
+            handled
         }
+    }
+
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

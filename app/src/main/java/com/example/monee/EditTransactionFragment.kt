@@ -13,21 +13,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.monee.databinding.FragmentEditTransactionBinding // Impor kelas binding
+import com.example.monee.databinding.FragmentEditTransactionBinding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.button.MaterialButton
 import java.text.DecimalFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
-// Hapus R.layout.fragment_edit_transaction dari sini
 class EditTransactionFragment : Fragment() {
 
-    // Deklarasi variabel binding
     private var _binding: FragmentEditTransactionBinding? = null
     private val binding get() = _binding!!
 
@@ -52,24 +47,21 @@ class EditTransactionFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
-        // Hapus semua `view.findViewById`
-
         transaksiId = arguments?.getInt("transaksiId") ?: -1
         if (transaksiId == -1) {
             findNavController().navigateUp()
             return
         }
 
-        val sdf = SimpleDateFormat("dd MMM yyyy", Locale.Builder().setLanguage("id").setRegion("ID").build())
+        val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
         val formatter = DecimalFormat("#,###")
 
         viewModel.getById(transaksiId).observe(viewLifecycleOwner) { data ->
             transaksiData = data
 
-            // Gunakan `binding` untuk mengakses view
             binding.etTitle.setText(data.judul)
-            binding.etAmount.setText(formatter.format(data.nominal))
-            binding.autoCompleteCategory.setText(data.kategori, false)
+            binding.etAmount.setText(formatter.format(data.nominal).replace(",", "."))
+            binding.actCategory.setText(data.kategori, false)
             binding.etNote.setText(data.deskripsi)
 
             selectedTanggal = data.tanggal
@@ -107,7 +99,7 @@ class EditTransactionFragment : Fragment() {
 
         binding.btnSave.setOnClickListener {
             if (binding.etTitle.text.isNullOrBlank() || binding.etAmount.text.isNullOrBlank()) {
-                Toast.makeText(requireContext(), "Lengkapi data terlebih dahulu", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.lengkapi_data), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -117,7 +109,7 @@ class EditTransactionFragment : Fragment() {
             val updated = transaksiData.copy(
                 judul = binding.etTitle.text.toString().trim(),
                 nominal = nominalValue,
-                kategori = binding.autoCompleteCategory.text.toString(),
+                kategori = binding.actCategory.text.toString(),
                 tipe = selectedType,
                 tanggal = selectedTanggal,
                 deskripsi = binding.etNote.text.toString().trim()
@@ -138,7 +130,7 @@ class EditTransactionFragment : Fragment() {
             "Perumahan", "Hiburan", "Kesehatan", "Pendidikan", "Gaji", "Hadiah", "Lainnya"
         )
 
-        binding.autoCompleteCategory.setAdapter(
+        binding.actCategory.setAdapter(
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
         )
     }
@@ -165,7 +157,6 @@ class EditTransactionFragment : Fragment() {
     }
 }
 
-// Kelas CurrencyTextWatcher tidak perlu diubah dan bisa tetap di sini
 class CurrencyTextWatcher(private val editText: EditText) : TextWatcher {
     private val decimalFormat = DecimalFormat("#,###")
     init {
@@ -181,7 +172,7 @@ class CurrencyTextWatcher(private val editText: EditText) : TextWatcher {
         editText.removeTextChangedListener(this)
         try {
             var originalString = s.toString()
-            originalString = originalString.replace("[^\\d]".toRegex(), "")
+            originalString = originalString.replace("\\D".toRegex(), "")
             if (originalString.isNotEmpty()) {
                 val longval = originalString.toLong()
                 val formattedString = decimalFormat.format(longval)
@@ -192,7 +183,7 @@ class CurrencyTextWatcher(private val editText: EditText) : TextWatcher {
             }
         } catch (nfe: NumberFormatException) {
             nfe.printStackTrace()
-        } catch (e: ParseException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         editText.addTextChangedListener(this)

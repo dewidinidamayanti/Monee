@@ -13,28 +13,23 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.monee.databinding.FragmentAddTransactionBinding // 1. Impor kelas binding
+import com.example.monee.databinding.FragmentAddTransactionBinding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 import com.google.android.material.button.MaterialButton
 import java.text.DecimalFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 class AddTransactionFragment : Fragment() {
 
-    // 2. Deklarasikan variabel binding
     private var _binding: FragmentAddTransactionBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: TransaksiViewModel
-    private var selectedType = "Pengeluaran" // Default ke pengeluaran
+    private var selectedType = "Pengeluaran"
     private var selectedTanggal: Long = System.currentTimeMillis()
 
-    // 3. Gunakan onCreateView untuk inflate layout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,12 +43,10 @@ class AddTransactionFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity())[TransaksiViewModel::class.java]
 
-        // 4. Perbarui UI awal menggunakan binding
-        val sdf = SimpleDateFormat("dd MMM yyyy", Locale.Builder().setLanguage("id").setRegion("ID").build())
+        val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
         binding.etDate.setText(sdf.format(Date(selectedTanggal)))
         updateTypeUI(selectedType, binding.btnExpense, binding.btnIncome)
 
-        // 5. Tambahkan listener dan logika lain menggunakan binding
         binding.etAmount.addTextChangedListener(CurrencyTextWatcher(binding.etAmount))
 
         binding.btnExpense.setOnClickListener {
@@ -81,15 +74,15 @@ class AddTransactionFragment : Fragment() {
 
         binding.btnSave.setOnClickListener {
             val title = binding.etTitle.text.toString().trim()
-            val amountStr = binding.etAmount.text.toString()
-            val category = binding.autoCompleteCategory.text.toString()
+            val amountStr = binding.etAmount.text.toString().replace(".", "")
+            val category = binding.actCategory.text.toString()
 
             if (title.isBlank() || amountStr.isBlank() || category.isBlank()) {
-                Toast.makeText(requireContext(), "Lengkapi Judul, Nominal, dan Kategori", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.lengkapi_data), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val nominalValue = amountStr.replace(".", "").toDouble()
+            val nominalValue = amountStr.toDouble()
 
             val newTransaksi = Transaksi(
                 judul = title,
@@ -104,12 +97,11 @@ class AddTransactionFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-
         val categories = listOf(
             "Makanan", "Belanja", "Transportasi", "Utilitas",
             "Perumahan", "Hiburan", "Kesehatan", "Pendidikan", "Gaji", "Hadiah", "Lainnya"
         )
-        binding.autoCompleteCategory.setAdapter(
+        binding.actCategory.setAdapter(
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, categories)
         )
     }
@@ -130,7 +122,6 @@ class AddTransactionFragment : Fragment() {
         }
     }
 
-    // 6. Jangan lupa tambahkan onDestroyView
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

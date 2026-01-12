@@ -1,10 +1,7 @@
 package com.example.monee
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -28,14 +25,11 @@ class TransaksiAdapter(
         }
     }
 
-
-    // Ubah parameter ViewHolder dari View menjadi ItemTransaksiBinding
     inner class VH(private val binding: ItemTransaksiBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        // Tidak perlu findViewById lagi!
 
         fun bind(item: Transaksi) {
-            // Langsung akses view dari objek binding
+
             binding.tvTitle.text = item.judul
             binding.tvCategory.text = item.kategori
 
@@ -46,12 +40,12 @@ class TransaksiAdapter(
                 binding.tvAmount.text = "+ ${formatRupiah(item.nominal)}"
                 binding.tvAmount.setTextColor(itemView.context.getColor(R.color.incomeGreen))
                 binding.ivIcon.setColorFilter(itemView.context.getColor(R.color.incomeGreen))
-                binding.iconBg.setBackgroundResource(R.drawable.bg_circle_green_soft)
+                binding.flIconBg.setBackgroundResource(R.drawable.bg_circle_green_soft)
             } else {
                 binding.tvAmount.text = "- ${formatRupiah(item.nominal)}"
                 binding.tvAmount.setTextColor(itemView.context.getColor(R.color.expenseRed))
                 binding.ivIcon.setColorFilter(itemView.context.getColor(R.color.expenseRed))
-                binding.iconBg.setBackgroundResource(R.drawable.bg_circle_red_soft)
+                binding.flIconBg.setBackgroundResource(R.drawable.bg_circle_red_soft)
             }
 
             binding.ivIcon.setImageResource(getCategoryIcon(item.kategori))
@@ -62,7 +56,7 @@ class TransaksiAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        // Gunakan binding untuk inflate layout
+
         val binding = ItemTransaksiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }

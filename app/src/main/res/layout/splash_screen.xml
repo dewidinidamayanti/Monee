@@ -8,7 +8,7 @@
     android:background="@drawable/splash_bg">
 
     <TextView
-        android:id="@+id/tvAppName"
+        android:id="@+id/tv_app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
@@ -23,21 +23,21 @@
         android:orientation="horizontal">
 
         <View
-            android:id="@+id/dot1"
+            android:id="@+id/dot_1"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:background="@drawable/dot_white"
             android:layout_marginEnd="6dp"/>
 
         <View
-            android:id="@+id/dot2"
+            android:id="@+id/dot_2"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:background="@drawable/dot_white"
             android:layout_marginEnd="6dp"/>
 
         <View
-            android:id="@+id/dot3"
+            android:id="@+id/dot_3"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:background="@drawable/dot_white"/>

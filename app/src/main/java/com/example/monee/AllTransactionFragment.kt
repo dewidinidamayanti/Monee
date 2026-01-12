@@ -10,14 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.monee.databinding.FragmentAllTransactionBinding // 1. Impor kelas binding
+import com.example.monee.databinding.FragmentAllTransactionBinding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
 
-// Hapus R.layout dari konstruktor Fragment
 class AllTransactionFragment : Fragment() {
 
-    // 2. Deklarasikan variabel binding
     private var _binding: FragmentAllTransactionBinding? = null
     private val binding get() = _binding!!
 
@@ -28,7 +26,6 @@ class AllTransactionFragment : Fragment() {
     private var currentFilter = "Semua"
     private var isSortNewest = true
 
-    // 3. Gunakan onCreateView untuk inflate layout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,45 +49,35 @@ class AllTransactionFragment : Fragment() {
             }
         )
 
-        // 5. Gunakan objek `binding` untuk mengakses semua view
         binding.rvAllTransaksi.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAllTransaksi.adapter = adapter
 
-        // Tampilkan ProgressBar sebelum mengamati data
-        binding.progressBar.visibility = View.VISIBLE
+        // Gunakan ID pb_all sesuai XML
+        binding.pbAll.visibility = View.VISIBLE
         binding.rvAllTransaksi.visibility = View.GONE
 
-
         viewModel.allTransaksi.observe(viewLifecycleOwner) {
-            // Sembunyikan ProgressBar setelah data diterima
-            binding.progressBar.visibility = View.GONE
-            binding.rvAllTransaksi.visibility = View.VISIBLE // Tampilkan RecyclerView lagi
-
+            binding.pbAll.visibility = View.GONE
+            binding.rvAllTransaksi.visibility = View.VISIBLE
 
             allList = it
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
-        // Ini sudah kita perbaiki sebelumnya, tetap gunakan setOnCheckedStateChangeListener
-        binding.chipGroupFilter.setOnCheckedStateChangeListener { group, checkedIds ->
-            val checkedId = checkedIds.firstOrNull() ?: R.id.chipAll
+        binding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
+            val checkedId = checkedIds.firstOrNull() ?: R.id.chip_all
             currentFilter = when (checkedId) {
-                R.id.chipIncome -> "Pemasukan"
-                R.id.chipExpense -> "Pengeluaran"
+                R.id.chip_income -> "Pemasukan"
+                R.id.chip_expense -> "Pengeluaran"
                 else -> "Semua"
             }
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
-        binding.btnSort.setImageResource(R.drawable.ic_sort) // Gunakan satu ikon saja
-
         binding.btnSort.setOnClickListener {
             isSortNewest = !isSortNewest
-
-            // Animasikan rotasi ikon
-            val rotationAngle = if (isSortNewest) 0f else 180f // 0 derajat untuk terbaru, 180 derajat (terbalik) untuk terlama
+            val rotationAngle = if (isSortNewest) 0f else 180f
             binding.btnSort.animate().rotation(rotationAngle).setDuration(300).start()
-
             applyFilterAndSearch(binding.etSearch.text.toString())
         }
 
@@ -102,23 +89,21 @@ class AllTransactionFragment : Fragment() {
             }
         })
 
-        // Atur chip "Semua" sebagai default
         binding.chipAll.isChecked = true
     }
 
     private fun applyFilterAndSearch(keyword: String) {
-
         var result = allList
 
         if (currentFilter != "Semua") {
-            result = result.filter { it.tipe == currentFilter }
+            result = result.filter { it.tipe.equals(currentFilter, ignoreCase = true) }
         }
 
         if (keyword.isNotBlank()) {
             result = result.filter {
                 it.judul.contains(keyword, true) ||
                         it.kategori.contains(keyword, true) ||
-                        (it.deskripsi?.contains(keyword, true) ?: false) // Lebih aman untuk deskripsi
+                        (it.deskripsi?.contains(keyword, true) ?: false)
             }
         }
 
@@ -128,14 +113,12 @@ class AllTransactionFragment : Fragment() {
             result.sortedBy { it.tanggal }
         }
 
-        // 6. Gunakan `binding` juga di sini
-        binding.tvCount.text = "${result.size} Transaksi"
+        binding.tvCount.text = getString(R.string.jumlah_transaksi, result.size)
         binding.tvEmpty.visibility = if (result.isEmpty()) View.VISIBLE else View.GONE
 
         adapter.submitList(result)
     }
 
-    // 7. Jangan lupa tambahkan onDestroyView
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

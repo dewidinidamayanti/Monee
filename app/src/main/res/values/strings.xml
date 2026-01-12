@@ -1,44 +1,35 @@
 <resources>
     <string name="app_name">Monee</string>
-    <string name="edit_transaksi">Edit Transaksi</string>
-    <string name="pengeluaran">Pengeluaran</string>
+    <string name="total_saldo">Total Saldo</string>
     <string name="pemasukan">Pemasukan</string>
+    <string name="pengeluaran">Pengeluaran</string>
+    <string name="transaksi_terkini">Transaksi Terkini</string>
+    <string name="lihat_semua">Lihat Semua</string>
+    <string name="belum_ada_transaksi">Belum ada transaksi</string>
+    <string name="cari_transaksi">Cari transaksi...</string>
+    <string name="semua">Semua</string>
+    <string name="jumlah_transaksi">%1$d Transaksi</string>
+    <string name="tambah_transaksi">Tambah Transaksi</string>
+    <string name="edit_transaksi">Edit Transaksi</string>
+    <string name="hapus_transaksi_title">Hapus Transaksi</string>
+    <string name="hapus_transaksi_msg">Yakin ingin menghapus transaksi ini?</string>
+    <string name="hapus">Hapus</string>
+    <string name="batal">Batal</string>
+    <string name="simpan">Simpan</string>
     <string name="judul">Judul</string>
-    <string name="jumlah">Jumlah</string>
+    <string name="nominal">Nominal</string>
     <string name="kategori">Kategori</string>
-    <string name="pilih_kategori">Pilih Kategori</string>
     <string name="tanggal">Tanggal</string>
     <string name="deskripsi_opsional">Deskripsi (Opsional)</string>
-    <string name="batal">Batal</string>
-    <string name="simpan_perubahan">Simpan Perubahan</string>
-
-    <string name="des_ikon_kategori">Ikon kategori transaksi</string>
-    <string name="des_tombol_hapus">Tombol hapus transaksi</string>
-
-    <!-- Transaksi -->
-    <string name="add_transaksi">Tambah Transaksi</string>
-    <string name="close">Tutup</string>
+    <string name="gagal_memuat">Gagal memuat data</string>
+    <string name="lengkapi_data">Lengkapi data terlebih dahulu</string>
     <string name="tipe">Tipe</string>
+    <string name="jumlah">Jumlah</string>
     <string name="hint_judul">Masukkan judul</string>
     <string name="hint_jumlah">Masukkan jumlah</string>
     <string name="hint_kategori">Pilih kategori</string>
     <string name="hint_tanggal">Pilih tanggal</string>
     <string name="hint_deskripsi">Masukkan deskripsi</string>
-    <string name="simpan">Simpan</string>
-    <string name="hapus_transaksi">Hapus Transaksi</string>
-    <string name="tambah">Tambah</string>
-    <string name="search">Cari transaksi...</string>
-    <string name="semua">Semua</string>
-    <string name="kosong">0 Transaksi</string>
-    <string name="belum_ada_transaksi">Belum ada transaksi</string>
-    <string name="total_saldo">Total Saldo</string>
-    <string name="Orp">Rp0</string>
-    <string name="pemasukan2">Pemasukan :</string>
-    <string name="pengeluaran2">Pengeluaran :</string>
-    <string name="lihat_semua">Lihat Semua</string>
-    <string name="transaksi_terkini">Transaksi Terkini</string>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="close">Tutup</string>
+    <string name="rupiah_zero">Rp0</string>
 </resources>

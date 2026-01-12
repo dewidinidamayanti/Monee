@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 1. Bungkus dengan MaterialCardView untuk tampilan kartu -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_item_transaksi"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
@@ -19,7 +19,7 @@
         android:padding="16dp">
 
         <FrameLayout
-            android:id="@+id/iconBg"
+            android:id="@+id/fl_icon_bg"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/bg_circle_red_soft"
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/ivIcon"
+                android:id="@+id/iv_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
@@ -37,9 +37,8 @@
                 app:tint="?attr/colorError" />
         </FrameLayout>
 
-        <!-- Judul Transaksi -->
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -47,37 +46,35 @@
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textColor="?attr/colorOnSurface"
-            app:layout_constraintEnd_toStartOf="@+id/tvAmount"
-            app:layout_constraintStart_toEndOf="@id/iconBg"
-            app:layout_constraintTop_toTopOf="@+id/iconBg"
+            app:layout_constraintEnd_toStartOf="@+id/tv_amount"
+            app:layout_constraintStart_toEndOf="@id/fl_icon_bg"
+            app:layout_constraintTop_toTopOf="@id/fl_icon_bg"
             tools:text="Beli Makan Siang di Warteg" />
 
-        <!-- Kategori & Tanggal -->
         <TextView
-            android:id="@+id/tvCategory"
+            android:id="@+id/tv_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="?attr/colorOnSurfaceVariant"
-            app:layout_constraintStart_toStartOf="@+id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
             tools:text="Makanan" />
 
         <TextView
-            android:id="@+id/tvDate"
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="?attr/colorOnSurfaceVariant"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tvCategory"
-            app:layout_constraintStart_toEndOf="@+id/tvCategory"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_category"
+            app:layout_constraintStart_toEndOf="@id/tv_category"
             tools:text="• 20 Mei 2024" />
 
-        <!-- Nominal -->
         <TextView
-            android:id="@+id/tvAmount"
+            android:id="@+id/tv_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -85,14 +82,13 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/deleteBg"
+            app:layout_constraintEnd_toStartOf="@+id/fl_delete_bg"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="-Rp15.000"
             tools:textColor="@color/expenseRed" />
 
-        <!-- Tombol Hapus dengan Frame Latar Belakang -->
         <FrameLayout
-            android:id="@+id/deleteBg"
+            android:id="@+id/fl_delete_bg"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/bg_retangle_red"
@@ -103,17 +99,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/btnDelete"
+                android:id="@+id/btn_delete"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:background="@drawable/bg_circle_red_soft"
-                android:contentDescription="@string/hapus_transaksi"
+                android:contentDescription="@string/hapus"
                 app:srcCompat="@drawable/ic_delete"
                 app:tint="?attr/colorError" />
-
         </FrameLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
