@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.monee.databinding.FragmentAllTransactionBinding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class AllTransactionFragment : Fragment() {
 
@@ -41,18 +43,15 @@ class AllTransactionFragment : Fragment() {
 
         adapter = TransaksiAdapter(
             onEditClick = { transaksi ->
-                val bundle = Bundle().apply { putInt("transaksiId", transaksi.id) }
+                val bundle = Bundle().apply { putParcelable("transaksi_obj", transaksi) }
                 findNavController().navigate(R.id.action_allTransactionFragment_to_editTransactionFragment, bundle)
             },
-            onDeleteClick = { transaksi ->
-                viewModel.delete(transaksi)
-            }
+            onDeleteClick = { transaksi -> confirmDelete(transaksi) }
         )
 
         binding.rvAllTransaksi.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAllTransaksi.adapter = adapter
 
-        // Gunakan ID pb_all sesuai XML
         binding.pbAll.visibility = View.VISIBLE
         binding.rvAllTransaksi.visibility = View.GONE
 
@@ -90,6 +89,22 @@ class AllTransactionFragment : Fragment() {
         })
 
         binding.chipAll.isChecked = true
+    }
+
+    private fun confirmDelete(transaksi: Transaksi) {
+        // Poin: Validasi konfirmasi sebelum hapus
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.hapus_transaksi_title)
+            .setMessage(R.string.hapus_transaksi_msg)
+            .setPositiveButton(R.string.hapus) { _, _ ->
+                viewModel.delete(transaksi)
+                Snackbar.make(binding.root, "Transaksi berhasil dihapus", Snackbar.LENGTH_LONG)
+                    .setAction("Undo") {
+                        viewModel.insert(transaksi)
+                    }.show()
+            }
+            .setNegativeButton(R.string.batal, null)
+            .show()
     }
 
     private fun applyFilterAndSearch(keyword: String) {

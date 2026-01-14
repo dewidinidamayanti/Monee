@@ -55,8 +55,10 @@
         android:label="Edit Transaksi">
 
         <argument
-            android:name="transaksiId"
-            app:argType="integer" />
+            android:name="transaksi_obj"
+            app:argType="com.example.monee.db.Transaksi"
+            app:nullable="true" />
+            
         <action
             android:id="@+id/action_editTransactionFragment_to_homeFragment"
             app:destination="@id/homeFragment"

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.monee.databinding.FragmentHomeBinding
 import com.example.monee.db.Transaksi
 import com.example.monee.db.TransaksiViewModel
+import com.google.android.material.snackbar.Snackbar
 import java.text.DecimalFormat
 
 class HomeFragment : Fragment() {
@@ -40,7 +41,7 @@ class HomeFragment : Fragment() {
 
         transaksiAdapter = TransaksiAdapter(
             onEditClick = { transaksi ->
-                val bundle = Bundle().apply { putInt("transaksiId", transaksi.id) }
+                val bundle = Bundle().apply { putParcelable("transaksi_obj", transaksi) }
                 findNavController().navigate(R.id.action_homeFragment_to_editTransactionFragment, bundle)
             },
             onDeleteClick = { transaksi -> confirmDelete(transaksi) }
@@ -60,13 +61,11 @@ class HomeFragment : Fragment() {
             )
         }
 
-        // Tampilkan ProgressBar saat mulai memuat data
         binding.pbHome.visibility = View.VISIBLE
         binding.rvTransaksiTerkini.visibility = View.GONE
 
         viewModel.allTransaksi.observe(viewLifecycleOwner) { list ->
             try {
-                // Sembunyikan ProgressBar setelah data diterima
                 binding.pbHome.visibility = View.GONE
 
                 if (list.isNullOrEmpty()) {
@@ -111,7 +110,13 @@ class HomeFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.hapus_transaksi_title)
             .setMessage(R.string.hapus_transaksi_msg)
-            .setPositiveButton(R.string.hapus) { _, _ -> viewModel.delete(transaksi) }
+            .setPositiveButton(R.string.hapus) { _, _ ->
+                viewModel.delete(transaksi)
+                Snackbar.make(binding.root, "Transaksi berhasil dihapus", Snackbar.LENGTH_LONG)
+                    .setAction("Undo") {
+                        viewModel.insert(transaksi)
+                    }.show()
+            }
             .setNegativeButton(R.string.batal, null)
             .show()
     }

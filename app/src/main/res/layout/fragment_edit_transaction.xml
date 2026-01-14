@@ -270,6 +270,14 @@
                     app:cornerRadius="10dp" />
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/pb_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

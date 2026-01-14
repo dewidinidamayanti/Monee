@@ -27,22 +27,20 @@ class TransaksiAdapter(
 
     inner class VH(private val binding: ItemTransaksiBinding) : RecyclerView.ViewHolder(binding.root) {
 
-
         fun bind(item: Transaksi) {
-
             binding.tvTitle.text = item.judul
             binding.tvCategory.text = item.kategori
 
-            val sdf = SimpleDateFormat("dd MMM yyyy", Locale.Builder().setLanguage("id").setRegion("ID").build())
+            val sdf = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
             binding.tvDate.text = sdf.format(Date(item.tanggal))
 
             if (item.tipe.equals("pemasukan", ignoreCase = true)) {
-                binding.tvAmount.text = "+ ${formatRupiah(item.nominal)}"
+                binding.tvAmount.text = String.format(Locale("id", "ID"), "+ %s", formatRupiah(item.nominal))
                 binding.tvAmount.setTextColor(itemView.context.getColor(R.color.incomeGreen))
                 binding.ivIcon.setColorFilter(itemView.context.getColor(R.color.incomeGreen))
                 binding.flIconBg.setBackgroundResource(R.drawable.bg_circle_green_soft)
             } else {
-                binding.tvAmount.text = "- ${formatRupiah(item.nominal)}"
+                binding.tvAmount.text = String.format(Locale("id", "ID"), "- %s", formatRupiah(item.nominal))
                 binding.tvAmount.setTextColor(itemView.context.getColor(R.color.expenseRed))
                 binding.ivIcon.setColorFilter(itemView.context.getColor(R.color.expenseRed))
                 binding.flIconBg.setBackgroundResource(R.drawable.bg_circle_red_soft)
@@ -50,13 +48,12 @@ class TransaksiAdapter(
 
             binding.ivIcon.setImageResource(getCategoryIcon(item.kategori))
 
-            binding.btnDelete.setOnClickListener { onDeleteClick(item) }
+            binding.flDeleteBg.setOnClickListener { onDeleteClick(item) }
             itemView.setOnClickListener { onEditClick(item) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-
         val binding = ItemTransaksiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return VH(binding)
     }
@@ -66,7 +63,7 @@ class TransaksiAdapter(
     }
 
     private fun formatRupiah(amount: Double): String {
-        return "Rp" + String.format("%,.0f", amount)
+        return "Rp" + String.format(Locale("id", "ID"), "%,.0f", amount)
     }
 
     private fun getCategoryIcon(category: String): Int {
